@@ -25,4 +25,26 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review for {self.product.name} by {self.author.username}"
+    
+
+# Model Comment
+class Comments(models.Models):
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+
+    def __str__(self):
+        return f"Comments by {self.author.username} on {self.review.product.name}"
+    
+
+# Model Like
+class Like(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='likes')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+
+    def __str__(self):
+        return f"Like by {self.author.username} on {self.review.product.name}"
+    
 
