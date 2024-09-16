@@ -8,7 +8,27 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+
 # Review ViewSet
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+
+# Comment ViewSet
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+# Like ViewSet
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+
+# Follower ViewSet
+class FollowerViewSet(viewsets.ModelViewSet):
+    queryset = Follower.objects.all()
+    serializer_class = FollowerSerializer
+
