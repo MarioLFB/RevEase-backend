@@ -1,12 +1,17 @@
 from rest_framework import viewsets
 from .models import Product, Review, Comment, Like, Follower
 from .serializers import ProductSerializer, ReviewSerializer, CommentSerializer, LikeSerializer, FollowerSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 # Product ViewSet
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 # Review ViewSet

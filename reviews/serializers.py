@@ -4,9 +4,12 @@ from .models import Product, Review, Comment, Like, Follower
 
 # Product Serializer
 class ProductSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')  
+
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'category', 'price', 'created_at', 'owner'] 
+
 
 # Review Serializer
 class ReviewSerializer(serializers.ModelSerializer):
