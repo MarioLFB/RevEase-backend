@@ -28,14 +28,14 @@ class Review(models.Model):
     
 
 # Model Comment
-class Comments(models.Model):
+class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
 
     def __str__(self):
-        return f"Comments by {self.author.username} on {self.review.product.name}"
+        return f"Comment by {self.author.username} on {self.review.product.name}"
     
 
 # Model Like
