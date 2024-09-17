@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Product, Review, Comment, Like, Follower
+from django.contrib.auth.models import User
 
 
 # Product Serializer
@@ -41,8 +42,9 @@ class LikeSerializer(serializers.ModelSerializer):
 # Follower Serializer
 class FollowerSerializer(serializers.ModelSerializer):
     follower = serializers.ReadOnlyField(source='follower.username')
-    following = serializers.ReadOnlyField(source='following.username')
+    following = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = Follower
         fields = ['id', 'follower', 'following']
+
