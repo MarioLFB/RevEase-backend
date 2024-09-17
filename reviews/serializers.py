@@ -13,24 +13,36 @@ class ProductSerializer(serializers.ModelSerializer):
 
 # Review Serializer
 class ReviewSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+
     class Meta:
         model = Review
-        fields = '__all__'
+        fields = ['id', 'content', 'rating', 'created_at', 'product', 'author']
+
 
 # Comment Serializer
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['id', 'content', 'created_at', 'review', 'author']
+
 
 # Like Serializer
 class LikeSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+
     class Meta:
         model = Like
-        fields = '__all__'
+        fields = ['id', 'created_at', 'review', 'author']
+
 
 # Follower Serializer
 class FollowerSerializer(serializers.ModelSerializer):
+    follower = serializers.ReadOnlyField(source='follower.username')
+    following = serializers.ReadOnlyField(source='following.username')
+
     class Meta:
         model = Follower
-        fields = '__all__'
+        fields = ['id', 'follower', 'following']
