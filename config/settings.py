@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     # Third party apps
     'reviews',
+    'authentication',
 
     # Filter Django for REST framework
     'django_filters',
