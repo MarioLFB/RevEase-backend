@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from .models import Product, Review, Comment, Like, Follower
 from .serializers import ProductSerializer, ReviewSerializer, CommentSerializer, LikeSerializer, FollowerSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
@@ -18,6 +18,14 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsAdminUser]
+        return super().get_permissions()        
+
+    
 
 
 # Review ViewSet
