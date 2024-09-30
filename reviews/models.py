@@ -47,6 +47,9 @@ class Like(models.Model):
     def __str__(self):
         return f"Like by {self.author.username} on {self.review.product.name}"
 
+    class Meta:
+        unique_together = ('author', 'review') 
+
 
 # Model Follower
 class Follower(models.Model):
