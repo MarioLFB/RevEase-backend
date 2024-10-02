@@ -4,7 +4,8 @@ from .serializers import ProductSerializer, ReviewSerializer, CommentSerializer,
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-
+from permissions import IsAuthorOrReadOnly
+from rest_framework.exceptions import ValidationError
 
 # Product ViewSet
 class ProductViewSet(viewsets.ModelViewSet):
@@ -24,6 +25,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsAdminUser]
         return super().get_permissions()
 
+
 # Review ViewSet
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
@@ -37,18 +39,28 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+
 # Comment ViewSet
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['review']
     ordering_fields = ['created_at']
     ordering = ['created_at']
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        review_id = self.kwargs.get('review_pk')
+        if not review_id:
+            raise ValidationError({"review": "Review ID is required in the URL."})
+        
+        try:
+            review = Review.objects.get(pk=review_id)
+        except Review.DoesNotExist:
+            raise ValidationError({"review": "Review not found."})
+        
+        serializer.save(author=self.request.user, review=review)
 
 
 # Follower ViewSet
